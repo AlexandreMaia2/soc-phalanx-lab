@@ -67,14 +67,29 @@ The pfSense WebGUI also became accessible from the Windows Server at:
 This confirmed that the Windows Server was successfully connected to the internal network behind pfSense.
 
 
+
+
+
 ## VLAN 20 - Administration Network
 
 The first segmented network created in the SOC PHALANX lab is VLAN 20, dedicated to administrative endpoints.
 
+### VLAN Creation and Segmentation
+
+VLAN 20 was created on the pfSense LAN parent interface and assigned to the ADMIN network.
+
+The VLAN uses the `10.20.20.0/24` network, providing an isolated Layer 3 network for administrative systems.
+
+![VLAN 20 creation](../../screenshots/pfsense/06-vlan20-created.png)
+
+A segmentation plan was defined before deploying the network services. This establishes the addressing structure and separates administrative endpoints from the original LAN and future security infrastructure.
+
+![VLAN segmentation plan](../../screenshots/pfsense/07-vlan-segmentation-plan.png)
+
 ### VLAN Configuration
 
 | Setting | Value |
-|---|---|
+| --- | --- |
 | VLAN ID | 20 |
 | Interface | ADMIN |
 | Network | 10.20.20.0/24 |
@@ -89,17 +104,23 @@ The DHCP pool was intentionally limited to `10.20.20.100-199`, leaving addresses
 
 DHCP was enabled on the ADMIN interface to automatically provide network configuration to client systems connected to VLAN 20.
 
-![ADMIN VLAN DHCP enabled](../../screenshots/pfsense/06-admin-vlan-dhcp-enabled.png)
+![ADMIN VLAN DHCP enabled](../../screenshots/pfsense/08-admin-vlan-dhcp-enabled.png)
 
 The configured DHCP pool distributes addresses between `10.20.20.100` and `10.20.20.199` within the `10.20.20.0/24` subnet.
 
-![ADMIN VLAN DHCP pool](../../screenshots/pfsense/07-admin-vlan-dhcp-pool.png)
+![ADMIN VLAN DHCP pool](../../screenshots/pfsense/09-admin-vlan-dhcp-pool.png)
 
 ### Current Status
 
-- VLAN 20 created and assigned to the ADMIN interface
-- Static gateway configured as `10.20.20.1/24`
-- DHCP service enabled
+- VLAN 20 created
+- VLAN 20 assigned to the ADMIN interface
+- ADMIN network configured as `10.20.20.0/24`
+- pfSense gateway configured as `10.20.20.1`
+- DHCP service enabled on the ADMIN interface
 - DHCP pool configured as `10.20.20.100-199`
-- Client validation pending
+- Client connectivity validation pending
 - Inter-VLAN firewall rules pending
+
+### Next Step
+
+The next stage is to connect a client system to VLAN 20 and validate DHCP address assignment, gateway connectivity, and network isolation before implementing additional firewall rules and security monitoring.
